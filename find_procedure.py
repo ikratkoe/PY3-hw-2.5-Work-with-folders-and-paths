@@ -52,57 +52,37 @@ def check_encoding(fname):
    return result['encoding']
 
 
-def compare_files(f1, f2):
-   # cod1 = check_encoding(f1)
-   # cod2 = check_encoding(f2)
-    difrnts = []
-    cnt = 0
-    with open(f1) as ff1:
-        with open((f2)) as ff2:
-            for l1 in ff1:
-                cnt += 1
-                l2 = next(ff2)
-                if l1 != l2:
-                    print("файлы {}  .. и ..  {} не совпадают в строке ... {}".format(ff1, ff2, cnt))
-                    difrnts.append(cnt)
-    return(difrnts)
-
-
 def file_filter(files):
     filtered = []
     print("Введите текст для поиска:")
     targetstr = input()
     cnt = 0
     for file in files:
-        with open(file) as f:
+        cod = check_encoding(file)
+        with open(file, encoding=cod) as f:
+            print(cod)
             for l in f:
                 if targetstr in l:
                     print("Совпадение найдено в файле {}".format(file))
-                    cnt +=1
+                    cnt += 1
                     filtered.append(file)
                     break
-            else: files.remove(file)
     return (cnt, filtered)
 
-migrations1 = 'Migrations'
-migrations2 = 'Advanced Migrations'
+migrations1 = "Migrations"
+migrations2 = "Advanced Migrations"
 
-files1 = glob.glob(os.path.join(migrations1, "*.sql"))
-# files2 = glob.glob(os.path.join(migrations2, "*.sql"))
-#
-#
-# for f1, f2 in zip(files1, files2):
-#    lstdif = compare_files(f1, f2)
-#
-# if lstdif == [] :
-#    print("файлы {}  .. и ..  {} совпадают".format(files1, files2))
-# else :
-#    for i in range(len(lstdif)):
-#       print("строка - ", i)
+print("Выберите Migrations или Advanced Migrations, введите M или A")
+while True:
+    fld = input().upper()
+    if fld == 'M' or fld == 'A': break
+if fld == 'M' : migrations = migrations1
+else : migrations = migrations2
+
+files = glob.glob(os.path.join(migrations, "*.sql"))
 
 while True:
-    print("Выбрано файлов ", len(files1))
-    cnt, files = file_filter(files1)
+    cnt, files = file_filter(files)
     for file in files:
         print(file)
     print("Совпадения найдены в " , cnt, " файлах")
