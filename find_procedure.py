@@ -54,17 +54,16 @@ def check_encoding(fname):
 
 def file_filter(files):
     filtered = []
-    print("Введите текст для поиска:")
+    print("Введите строку для поиска:")
     targetstr = input()
     cnt = 0
     for file in files:
         cod = check_encoding(file)
         with open(file, encoding=cod) as f:
-            print(cod)
             for l in f:
                 if targetstr in l:
-                    print("Совпадение найдено в файле {}".format(file))
                     cnt += 1
+                    print(file)
                     filtered.append(file)
                     break
     return (cnt, filtered)
@@ -83,8 +82,6 @@ files = glob.glob(os.path.join(migrations, "*.sql"))
 
 while True:
     cnt, files = file_filter(files)
-    for file in files:
-        print(file)
     print("Совпадения найдены в " , cnt, " файлах")
 
 
